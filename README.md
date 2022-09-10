@@ -1,10 +1,26 @@
-# Little File Sorter
+# Buckets - File Sorter
 
 CLI application to take several files in one single directory and separate them in other directories within the original 
-one based in some options like:
- - Number of files
- - Date of creation
- - Name of the files
- - Type
+one based on the number of files.
 
-It can also take files from several directories and re-sorter in the home directory or new directories.
+## Install
+
+```commandline
+make
+```
+
+## Usage
+```commandline
+buckets <number_of_files>
+```
+
+Example
+```commandline
+buckets 20
+```
+Separate the files in the current directory in directories each one at most have 20 files.
+
+## Uninstall
+```commandline
+make clean
+```
