@@ -6,7 +6,7 @@ import sorter
 
 def main():
     try:
-        n = int(sys.argv[1])
+        n = int(sys.argv[1])  # The first argument must be an integer greater than 0
         if n <= 0:
             print("Error: Argument must be greater or equal to 1")
             sys.exit(1)

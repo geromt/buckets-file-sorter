@@ -1,7 +1,7 @@
 # Buckets - File Sorter
 
 CLI application to take several files in one single directory and separate them in other directories within the original 
-one based on the number of files.
+one given a number of files. If there are directories among the files, it ignores them. 
 
 ## Install
 
@@ -10,7 +10,7 @@ make
 ```
 
 ## Usage
-```commandline
+```
 buckets <number_of_files>
 ```
 
