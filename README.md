@@ -10,15 +10,32 @@ make
 ```
 
 ## Usage
-```
-buckets <number_of_files>
-```
 
-Example
+### Help
 ```commandline
-buckets 20
+buckets --help
+```
+It shows the available options.
+
+### Separate by number of files
+```commandline
+buckets -n <number>
+buckets --number <number>
+```
+Separate the files in directories each one with at most `<number>` files.
+
+*Example*
+```commandline
+buckets -n 20
 ```
 Separate the files in the current directory in directories each one at most have 20 files.
+
+### Reverse operation
+```commandline
+buckets -r
+buckets --reverse
+```
+Takes the files in the directories in the working directory, and move them to the working directory.
 
 ## Uninstall
 ```commandline

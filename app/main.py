@@ -1,23 +1,27 @@
 #!/usr/bin/python3
 
+import argparse
 import sys
+
 import sorter
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-n", "--number", type=int, help="Max number of files in each directory")
+parser.add_argument("-r", "--reverse",
+                    help="Takes the files in the directories in the working dir, and move them to working dir",
+                    action="store_true")
 
 
 def main():
-    try:
-        n = int(sys.argv[1])  # The first argument must be an integer greater than 0
-        if n <= 0:
-            print("Error: Argument must be greater or equal to 1")
-            sys.exit(1)
-    except IndexError:
-        print("Error: Need to provide the number of files in each directory")
+    args = parser.parse_args()
+    if args.number:
+        sorter.create_dirs(sorter.separate_by_number(args.number))
+    elif args.reverse:
+        sorter.join_from_dirs()
+    else:
+        print("Error: You must select an option")
+        print("Use buckets --help to see the options available")
         sys.exit(1)
-    except ValueError:
-        print("Error: Argument is not a number")
-        sys.exit(1)
-
-    sorter.create_dirs(sorter.separate_by_number(n))
 
 
 if __name__ == "__main__":

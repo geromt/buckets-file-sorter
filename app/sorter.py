@@ -2,7 +2,7 @@ import os
 
 
 def separate_by_number(n: int):
-    """Returns a dictionary in which each key is an integer and it's associated with a list of file names which
+    """Returns a dictionary in which each key is an integer, and it's associated with a list of file names which
     at most n elements"""
     buckets = {}
     count = 0
@@ -23,6 +23,14 @@ def separate_by_number(n: int):
         count += 1
 
     return buckets
+
+
+def join_from_dirs():
+    """Move all the files from all the directories into the current directory"""
+    for entry in os.scandir():
+        if entry.is_dir():
+            for e in os.scandir(entry.path):
+                os.rename(e.path, "./" + e.name)
 
 
 def create_dirs(buckets):
