@@ -35,6 +35,12 @@ buckets -n 20
 ```
 Separate the files in the current directory in directories each one at most have 20 files.
 
+### Separate by date
+```commandline
+buckets -d d|m|y
+```
+Separate the files by day, month or year
+
 ### Reverse operation
 ```commandline
 buckets -r

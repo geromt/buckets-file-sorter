@@ -35,7 +35,7 @@ def separate_by_date(mode: str):
         if entry.is_dir():
             continue
 
-        stat = entry.stat
+        stat = entry.stat()
         t = time.localtime(stat.st_mtime)
         if mode == "y":
             key = t.tm_year
@@ -60,11 +60,14 @@ def join_from_dirs():
                 os.rename(e.path, "./" + e.name)
 
 
-def create_dirs(buckets, prefix=""):
+def create_dirs(buckets, prefix="", form=True):
     """Given a dictionary of int:list_of_file_name pairs, creates a directory for each key and move the files
     in the list to that directory"""
     for name in buckets:
-        dir_name = form_name(name, len(buckets), prefix)
+        if form:
+            dir_name = form_name(name, len(buckets), prefix)
+        else:
+            dir_name = name
         os.mkdir(dir_name)
         for f in buckets[name]:
             os.rename("./" + f, "./" + dir_name + "/" + f)

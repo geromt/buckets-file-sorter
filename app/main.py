@@ -22,8 +22,10 @@ def main():
         else:
             sorter.create_dirs(sorter.separate_by_number(args.number))
     elif args.date:
-        if args.date in ("y", "m", "d"):
+        if args.date in ("y", "d"):
             sorter.create_dirs(sorter.separate_by_date(args.date))
+        if args.date == "m":
+            sorter.create_dirs(sorter.separate_by_date(args.date), form=False)
         else:
             print("Error: The value is not valid.")
             print("Use buckets --help to see the valid values.")
