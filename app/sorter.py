@@ -33,10 +33,11 @@ def join_from_dirs():
                 os.rename(e.path, "./" + e.name)
 
 
-def create_dirs(buckets):
+def create_dirs(buckets, prefix=""):
     """Given a dictionary of int:list_of_file_name pairs, creates a directory for each key and move the files
     in the list to that directory"""
     for name in buckets:
-        os.mkdir(str(name))
+        dir_name = prefix + str(name)
+        os.mkdir(dir_name)
         for f in buckets[name]:
-            os.rename("./" + f, "./" + str(name) + "/" + f)
+            os.rename("./" + f, "./" + dir_name + "/" + f)

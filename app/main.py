@@ -7,6 +7,7 @@ import sorter
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-n", "--number", type=int, help="Max number of files in each directory")
+parser.add_argument("-p", "--prefix", help="Sets a prefix to the directories created")
 parser.add_argument("-r", "--reverse",
                     help="Takes the files in the directories in the working dir, and move them to working dir",
                     action="store_true")
@@ -15,7 +16,11 @@ parser.add_argument("-r", "--reverse",
 def main():
     args = parser.parse_args()
     if args.number:
-        sorter.create_dirs(sorter.separate_by_number(args.number))
+        if args.prefix:
+            sorter.create_dirs(sorter.separate_by_number(args.number), prefix=args.prefix)
+        else:
+            sorter.create_dirs(sorter.separate_by_number(args.number))
+
     elif args.reverse:
         sorter.join_from_dirs()
     else:
