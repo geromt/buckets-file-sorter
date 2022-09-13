@@ -24,7 +24,12 @@ buckets --number <number>
 ```
 Separate the files in directories each one with at most `<number>` files.
 
-*Example*
+You can also indicate a prefix to name the directories
+```commandline
+buckets -n <number> -p <prefix>
+```
+
+**Example**
 ```commandline
 buckets -n 20
 ```

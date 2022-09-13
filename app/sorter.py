@@ -1,3 +1,4 @@
+import math
 import os
 
 
@@ -37,7 +38,22 @@ def create_dirs(buckets, prefix=""):
     """Given a dictionary of int:list_of_file_name pairs, creates a directory for each key and move the files
     in the list to that directory"""
     for name in buckets:
-        dir_name = prefix + str(name)
+        dir_name = form_name(name, len(buckets), prefix)
         os.mkdir(dir_name)
         for f in buckets[name]:
             os.rename("./" + f, "./" + dir_name + "/" + f)
+
+
+def form_name(index, total, prefix):
+    if total != 0:
+        digits = math.floor(math.log10(total)) + 1
+    else:
+        digits = 1
+
+    if index != 0:
+        index_digits = math.floor(math.log10(index)) + 1
+    else:
+        index_digits = 1
+
+    zeros = digits - index_digits
+    return prefix + ("0" * zeros) + str(index)
