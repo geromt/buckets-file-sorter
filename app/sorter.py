@@ -1,5 +1,6 @@
 import math
 import os
+import time
 
 
 def separate_by_number(n: int):
@@ -22,6 +23,31 @@ def separate_by_number(n: int):
             buckets[index] = [entry.name]
 
         count += 1
+
+    return buckets
+
+
+def separate_by_date(mode: str):
+    """Returns a dictionary in which each key is an integer, and it's associated with a list of file names which
+    at most n elements"""
+    buckets = {}
+    for entry in os.scandir():
+        if entry.is_dir():
+            continue
+
+        stat = entry.stat
+        t = time.localtime(stat.st_mtime)
+        if mode == "y":
+            key = t.tm_year
+        elif mode == "m":
+            key = time.strftime("%B", t)
+        elif mode == "d":
+            key = t.tm_mday
+
+        if key in buckets:
+            buckets[key].append(entry.name)
+        else:
+            buckets[key] = [entry.name]
 
     return buckets
 

@@ -7,6 +7,7 @@ import sorter
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-n", "--number", type=int, help="Max number of files in each directory")
+parser.add_argument("-d", "--date", type=str, help="Separate the files by day, month or year")
 parser.add_argument("-p", "--prefix", help="Sets a prefix to the directories created")
 parser.add_argument("-r", "--reverse",
                     help="Takes the files in the directories in the working dir, and move them to working dir",
@@ -20,7 +21,13 @@ def main():
             sorter.create_dirs(sorter.separate_by_number(args.number), prefix=args.prefix)
         else:
             sorter.create_dirs(sorter.separate_by_number(args.number))
-
+    elif args.date:
+        if args.date in ("y", "m", "d"):
+            sorter.create_dirs(sorter.separate_by_date(args.date))
+        else:
+            print("Error: The value is not valid.")
+            print("Use buckets --help to see the valid values.")
+            sys.exit(1)
     elif args.reverse:
         sorter.join_from_dirs()
     else:
