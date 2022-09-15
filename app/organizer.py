@@ -95,16 +95,23 @@ def separate_by_date(mode: str) -> Dict[str, List[str]]:
     return buckets
 
 
-def join_from_dirs():
+def join_from_dirs(verbose=False):
     """Move the files inside the directories in the working directory into the
-     working directory. It does not delete the empty directories"""
+     working directory. It does not delete the empty directories
+
+     Args:
+         verbose (optional): If True, prints more information into the stdout
+     """
     for entry in os.scandir():
         if entry.is_dir():
             for e in os.scandir(entry.path):
                 os.rename(e.path, "./" + e.name)
+                if verbose:
+                    print(f"Move file: {entry.name + e.name} -> ./{e.name}")
 
 
-def create_dirs(buckets: Dict, prefix: str = "", key_are_int: bool = True):
+def create_dirs(buckets: Dict, prefix: str = "", key_are_int: bool = True,
+                verbose: bool = False):
     """Given a dictionary of int:list_of_filename pairs, creates a directory
     for each key and move the files in the list to that directory. If the keys
     are strings you must pass the key_are_int=False value
@@ -115,15 +122,20 @@ def create_dirs(buckets: Dict, prefix: str = "", key_are_int: bool = True):
         key_are_int (optional): Indicates if the keys are of int type. If the
             value is False, the keys are taken as strings and the directories
             are named as them.
+        verbose (optional): If True, prints more information in the stdout.
     """
     for k in buckets:
         if key_are_int:
             dir_name = _form_name(k, len(buckets), prefix)
         else:
-            dir_name = k
+            dir_name = prefix + k
         os.mkdir(dir_name)
+        if verbose:
+            print(f"Create directory: {dir_name}")
         for f in buckets[k]:
             os.rename("./" + f, "./" + dir_name + "/" + f)
+            if verbose:
+                print(f"Move file: {f} -> {dir_name + '/' + f}")
 
 
 def _form_name(index: int, total: int, prefix="") -> str:
