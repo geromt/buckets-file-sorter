@@ -3,7 +3,7 @@
 import argparse
 import sys
 
-import sorter
+import organizer
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-n", "--number", type=int, help="Max number of files in each directory")
@@ -18,18 +18,20 @@ def main():
     args = parser.parse_args()
     if args.number:
         if args.prefix:
-            sorter.create_dirs(sorter.separate_by_number(args.number), prefix=args.prefix)
+            organizer.create_dirs(organizer.separate_by_number(args.number),
+                                  prefix=args.prefix)
         else:
-            sorter.create_dirs(sorter.separate_by_number(args.number))
+            organizer.create_dirs(organizer.separate_by_number(args.number))
     elif args.date:
         if args.date in ("y", "d", "m"):
-            sorter.create_dirs(sorter.separate_by_date(args.date), form=False)
+            organizer.create_dirs(organizer.separate_by_date(args.date),
+                                  key_are_int=False)
         else:
             print("Error: The value is not valid.")
             print("Use buckets --help to see the valid values.")
             sys.exit(1)
     elif args.reverse:
-        sorter.join_from_dirs()
+        organizer.join_from_dirs()
     else:
         print("Error: You must select an option")
         print("Use buckets --help to see the options available")
