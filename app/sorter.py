@@ -40,9 +40,9 @@ def separate_by_date(mode: str):
         if mode == "y":
             key = t.tm_year
         elif mode == "m":
-            key = time.strftime("%B", t)
+            key = time.strftime("%Y-%m", t)
         elif mode == "d":
-            key = t.tm_mday
+            key = time.strftime("%Y-%m-%d", t)
 
         if key in buckets:
             buckets[key].append(entry.name)

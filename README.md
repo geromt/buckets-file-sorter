@@ -39,7 +39,12 @@ Separate the files in the current directory in directories each one at most have
 ```commandline
 buckets -d d|m|y
 ```
-Separate the files by day, month or year
+Separate the files by day, month or year. The directory's name change with each option: 
+
+| day     | `yyyy-mm-dd`   |
+|---------|----------------|
+| month   | `yyyy-mm`      |
+| year    | `yyyy`         |
 
 ### Reverse operation
 ```commandline
