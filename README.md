@@ -2,7 +2,9 @@
 
 CLI application to take several files in one single directory and separate them 
 in other directories within the original one given a number of files. If there 
-are directories among the files, it ignores them. 
+are directories among the files, it ignores them.
+
+This project is licensed under the terms of the [MIT license](./LICENSE).
 
 ## Install
 
