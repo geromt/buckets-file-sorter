@@ -91,7 +91,8 @@ def bydate(mode: str, prefix, verbose):
 
 @buckets.command(short_help="Reverse the buckets operation.")
 @click.option("--verbose", "-v", is_flag=True, help="Enables verbose mode.")
-def reverse(verbose=False):
+@click.option("--remove", "-r", is_flag=True, help="Remove the empty directories")
+def reverse(verbose=False, remove=False):
     """Move the files inside the directories in the working directory into the
      working directory. It does not delete the empty directories
      """
@@ -104,6 +105,8 @@ def reverse(verbose=False):
                 os.rename(e.path, "./" + e.name)
                 if verbose:
                     click.echo(f"Move file: {entry.name + e.name} -> ./{e.name}")
+            if remove:
+                os.rmdir(entry)
 
 
 def create_dirs(buckets_dir: dict, prefix: str = "", are_keys_int: bool = True,
