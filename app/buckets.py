@@ -6,13 +6,11 @@ modification.
 
 To see all options use
     buckets.py --help
-or
-    buckets --help
-after installing it
 """
-
-import sys
+import math
 import os
+import time
+
 import click
 
 
@@ -99,29 +97,29 @@ def reverse(verbose=False):
                     print(f"Move file: {entry.name + e.name} -> ./{e.name}")
 
 
-def create_dirs(buckets: Dict, prefix: str = "", key_are_int: bool = True,
+def create_dirs(buckets_dir: dict, prefix: str = "", key_are_int: bool = True,
                 verbose: bool = False):
     """Given a dictionary of int:list_of_filename pairs, creates a directory
     for each key and move the files in the list to that directory. If the keys
     are strings you must pass the key_are_int=False value
 
     Args:
-        buckets: Dictionary of int:list_of_filenames pairs
+        buckets_dir: Dictionary of int:list_of_filenames pairs
         prefix (optional): Prefix to name the directories that will be created
         key_are_int (optional): Indicates if the keys are of int type. If the
             value is False, the keys are taken as strings and the directories
             are named as them.
         verbose (optional): If True, prints more information in the stdout.
     """
-    for k in buckets:
+    for k in buckets_dir:
         if key_are_int:
-            dir_name = _form_name(k, len(buckets), prefix)
+            dir_name = _form_name(k, len(buckets_dir), prefix)
         else:
             dir_name = prefix + k
         os.mkdir(dir_name)
         if verbose:
             print(f"Create directory: {dir_name}")
-        for f in buckets[k]:
+        for f in buckets_dir[k]:
             os.rename("./" + f, "./" + dir_name + "/" + f)
             if verbose:
                 print(f"Move file: {f} -> {dir_name + '/' + f}")
