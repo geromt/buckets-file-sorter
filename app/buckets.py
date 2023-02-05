@@ -1,8 +1,7 @@
 #!/usr/bin/python3
 
-"""CLI application: separate the files in the working directory into different
-directories depending on the number of files or the date of the last
-modification.
+"""CLI application: separate the files in the working directory into different directories depending on the number of
+files or the date of the last modification.
 
 To see all options use
     buckets.py --help
@@ -29,23 +28,26 @@ def bynumber(number: int, prefix: str = "", verbose: bool = False):
 
     NUMBER: Max number of filenames in each directory.
     """
+    if verbose:
+        click.secho("Separate files by number")
+        click.secho(f"Each directory contains at most {number} files")
+
     buckets_dir = {}
     count = key = 0
     for entry in os.scandir():
         if entry.is_dir():
             continue
 
-        if count == number:
-            count = 0
-            key += 1
-
         if key in buckets_dir:
             buckets_dir[key].append(entry.name)
         else:
             buckets_dir[key] = [entry.name]
 
-        count += 1
-    create_dirs(buckets_dir, prefix=prefix, key_are_int=True, verbose=verbose)
+        count = (count + 1) % number
+        if count == 0:
+            key += 1
+
+    create_dirs(buckets_dir, prefix=prefix, are_keys_int=True, verbose=verbose)
 
 
 @buckets.command(short_help="Separate files by date (year, month or day).")
@@ -56,6 +58,10 @@ def bydate(mode: str, prefix, verbose):
     """Separate the filenames in the working directory by date of the last
     modification. It can separate files by year (y), month (m) or day (d).
     """
+    if verbose:
+        click.echo("Separate files by date")
+        click.echo(f"Mode: {mode}")
+
     if mode == "y":
         # This is best practice in Python, instead of assign a lambda to a
         # variable as key_name = lambda x: x.tm_year
@@ -80,7 +86,7 @@ def bydate(mode: str, prefix, verbose):
         else:
             buckets_dir[key] = [entry.name]
 
-    create_dirs(buckets_dir, prefix=prefix, key_are_int=False, verbose=verbose)
+    create_dirs(buckets_dir, prefix=prefix, are_keys_int=False, verbose=verbose)
 
 
 @buckets.command(short_help="Reverse the buckets operation.")
@@ -89,40 +95,43 @@ def reverse(verbose=False):
     """Move the files inside the directories in the working directory into the
      working directory. It does not delete the empty directories
      """
+    if verbose:
+        click.echo("Reverse buckets")
+
     for entry in os.scandir():
         if entry.is_dir():
             for e in os.scandir(entry.path):
                 os.rename(e.path, "./" + e.name)
                 if verbose:
-                    print(f"Move file: {entry.name + e.name} -> ./{e.name}")
+                    click.echo(f"Move file: {entry.name + e.name} -> ./{e.name}")
 
 
-def create_dirs(buckets_dir: dict, prefix: str = "", key_are_int: bool = True,
+def create_dirs(buckets_dir: dict, prefix: str = "", are_keys_int: bool = True,
                 verbose: bool = False):
-    """Given a dictionary of int:list_of_filename pairs, creates a directory
+    """Given a dictionary of key:list_of_filename pairs, creates a directory
     for each key and move the files in the list to that directory. If the keys
-    are strings you must pass the key_are_int=False value
+    are strings you must pass the are_keys_int=False value
 
     Args:
-        buckets_dir: Dictionary of int:list_of_filenames pairs
+        buckets_dir: Dictionary of key:list_of_filenames pairs
         prefix (optional): Prefix to name the directories that will be created
-        key_are_int (optional): Indicates if the keys are of int type. If the
+        are_keys_int (optional): Indicates if the keys are of int type. If the
             value is False, the keys are taken as strings and the directories
             are named as them.
         verbose (optional): If True, prints more information in the stdout.
     """
     for k in buckets_dir:
-        if key_are_int:
+        if are_keys_int:
             dir_name = _form_name(k, len(buckets_dir), prefix)
         else:
             dir_name = prefix + k
         os.mkdir(dir_name)
         if verbose:
-            print(f"Create directory: {dir_name}")
+            click.echo(f"Create directory: {dir_name}")
         for f in buckets_dir[k]:
             os.rename("./" + f, "./" + dir_name + "/" + f)
             if verbose:
-                print(f"Move file: {f} -> {dir_name + '/' + f}")
+                click.echo(f"Move file: {f} -> {dir_name + '/' + f}")
 
 
 def _form_name(index: int, total: int, prefix="") -> str:
