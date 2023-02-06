@@ -1,27 +1,26 @@
 import math
 import os
-from typing import Iterable
 
 import click
 
 
 def separate_by_number(number: int):
-    buckets_dir = {}
+    buckets_dic = {}
     count = key = 0
     for entry in os.scandir():
         if entry.is_dir():
             continue
 
-        if key in buckets_dir:
-            buckets_dir[key].append(entry.name)
+        if key in buckets_dic:
+            buckets_dic[key].append(entry.name)
         else:
-            buckets_dir[key] = [entry.name]
+            buckets_dic[key] = [entry.name]
 
         count = (count + 1) % number
         if count == 0:
             key += 1
 
-    return buckets_dir
+    return buckets_dic
 
             
 def create_dirs(buckets_dir: dict, prefix: str = "", are_keys_int: bool = True,
