@@ -7,11 +7,9 @@ To see all options use
     buckets.py --help
 """
 import os
-import time
-
 import click
 
-from utils import create_dirs
+from utils import *
 
 
 @click.group()
@@ -33,22 +31,8 @@ def bynumber(number: int, prefix: str = "", verbose: bool = False):
         click.secho("Separate files by number")
         click.secho(f"Each directory contains at most {number} files")
 
-    buckets_dir = {}
-    count = key = 0
-    for entry in os.scandir():
-        if entry.is_dir():
-            continue
-
-        if key in buckets_dir:
-            buckets_dir[key].append(entry.name)
-        else:
-            buckets_dir[key] = [entry.name]
-
-        count = (count + 1) % number
-        if count == 0:
-            key += 1
-
-    create_dirs(buckets_dir, prefix=prefix, are_keys_int=True, verbose=verbose)
+    buckets_dic = separate_files_by_number(number)
+    create_dirs(buckets_dic, prefix=prefix, are_keys_int=True, verbose=verbose)
 
 
 @buckets.command(short_help="Separate files by date (year, month or day).")
@@ -63,31 +47,8 @@ def bydate(mode: str, prefix, verbose):
         click.echo("Separate files by date")
         click.echo(f"Mode: {mode}")
 
-    if mode == "y":
-        # This is best practice in Python, instead of assign a lambda to a
-        # variable as key_name = lambda x: x.tm_year
-        def key_name(x): return str(x.tm_year)
-    elif mode == "m":
-        def key_name(x): return time.strftime("%Y-%m", x)
-    elif mode == "d":
-        def key_name(x): return time.strftime("%Y-%m-%d", x)
-    else:
-        raise ValueError(f"{mode} is not a valid value for mode attribute")
-
-    buckets_dir = {}
-    for entry in os.scandir():
-        if entry.is_dir():
-            continue
-
-        stat = entry.stat()
-        t = time.localtime(stat.st_mtime)
-        key = key_name(t)
-        if key in buckets_dir:
-            buckets_dir[key].append(entry.name)
-        else:
-            buckets_dir[key] = [entry.name]
-
-    create_dirs(buckets_dir, prefix=prefix, are_keys_int=False, verbose=verbose)
+    buckets_dic = separate_files_by_date(mode)
+    create_dirs(buckets_dic, prefix=prefix, are_keys_int=False, verbose=verbose)
 
 
 @buckets.command(short_help="Reverse the buckets operation.")

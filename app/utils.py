@@ -1,10 +1,11 @@
 import math
 import os
+import time
 
 import click
 
 
-def separate_by_number(number: int):
+def separate_files_by_number(number: int):
     buckets_dic = {}
     count = key = 0
     for entry in os.scandir():
@@ -21,6 +22,34 @@ def separate_by_number(number: int):
             key += 1
 
     return buckets_dic
+
+
+def separate_files_by_date(mode):
+    if mode == "y":
+        # This is best practice in Python, instead of assign a lambda to a
+        # variable as key_name = lambda x: x.tm_year
+        def key_name(x): return str(x.tm_year)
+    elif mode == "m":
+        def key_name(x): return time.strftime("%Y-%m", x)
+    elif mode == "d":
+        def key_name(x): return time.strftime("%Y-%m-%d", x)
+    else:
+        raise ValueError(f"{mode} is not a valid value for mode attribute")
+
+    buckets_dir = {}
+    for entry in os.scandir():
+        if entry.is_dir():
+            continue
+
+        stat = entry.stat()
+        t = time.localtime(stat.st_mtime)
+        key = key_name(t)
+        if key in buckets_dir:
+            buckets_dir[key].append(entry.name)
+        else:
+            buckets_dir[key] = [entry.name]
+
+    return buckets_dir
 
             
 def create_dirs(buckets_dir: dict, prefix: str = "", are_keys_int: bool = True,
