@@ -2,9 +2,9 @@ from tests.context import utils
 
 
 class MockDirEntry:
-    def __init__(self, name, dir):
+    def __init__(self, name, is_dir):
         self.name = name
-        self.dir = dir
+        self.dir = is_dir
 
     def is_dir(self):
         return self.dir
@@ -12,7 +12,7 @@ class MockDirEntry:
 
 def test_separate_by_number(mocker):
     mocker.patch("os.scandir", return_value=[])
-    assert utils.separate_by_number(0) == {}
+    assert utils.separate_files_by_number(0) == {}
 
 
 def test_separate_by_number_2(mocker):
@@ -23,4 +23,4 @@ def test_separate_by_number_2(mocker):
     expected_files_dic = {0: ["file1"],
                           1: ["file2"]}
 
-    assert utils.separate_by_number(1) == expected_files_dic
+    assert utils.separate_files_by_number(1) == expected_files_dic
